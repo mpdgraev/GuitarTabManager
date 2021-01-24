@@ -20,7 +20,7 @@ class Search: CliktCommand(
     override fun run() {
         val root = TabRoot(dir)
         val tabs = root.searchTabs(tuning?.let{Tuning(it)}, song?.let{Song(it)}, artist?.let{Artist(it)})
-        tabs.forEach{
+        tabs.sorted().forEach{
             echo(it)
         }
     }
