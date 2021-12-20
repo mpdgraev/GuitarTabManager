@@ -3,19 +3,23 @@ import me.xdrop.fuzzywuzzy.FuzzySearch
 import java.io.File
 
 val FUZZYMIN = 90
-inline class Song(val name: String){
+@JvmInline
+value class Song(val name: String){
     fun fuzEquals(other: Song) = FuzzySearch.weightedRatio(this.name, other.name) >= FUZZYMIN
 }
-inline class Tuning(val name: String){
+@JvmInline
+value class Tuning(val name: String){
     fun fuzEquals(other: Tuning) = FuzzySearch.weightedRatio(this.name, other.name) >= FUZZYMIN
 }
-inline class Artist(val name: String){
+@JvmInline
+value class Artist(val name: String){
     fun fuzEquals(other: Artist) = FuzzySearch.weightedRatio(this.name, other.name) >= FUZZYMIN
 }
-inline class Version(val name: String) // validate to confirm 'ver' in there?
+@JvmInline
+value class Version(val name: String) // validate to confirm 'ver' in there?
 
-// todo: add file extension
-data class Tab(val song: Song, val artist: Artist, val tuning: Tuning? = null, val version: Version? = null): Comparable<Tab> {
+// todo: add File
+data class Tab(val song: Song, val artist: Artist, val tuning: Tuning? = null, val version: Version? = null, val file: File): Comparable<Tab> {
     companion object {
         // naming schema as downloaded from ultimate-guitar
         // todo: use Tuxguitar libraries to parse the actual content instead of relying on filenames
@@ -35,9 +39,9 @@ data class Tab(val song: Song, val artist: Artist, val tuning: Tuning? = null, v
         val matchedGroups = match.groupValues
         if (matchedGroups[3] == ""){
             // no version
-            return Tab(Song(matchedGroups[2]), Artist(matchedGroups[1]), tuning)
+            return Tab(Song(matchedGroups[2]), Artist(matchedGroups[1]), tuning, file=file)
         }
-        return Tab(Song(matchedGroups[2]), Artist(matchedGroups[1]), tuning, Version(matchedGroups[3]))
+        return Tab(Song(matchedGroups[2]), Artist(matchedGroups[1]), tuning, Version(matchedGroups[3]), file)
         }
     }
 
@@ -61,6 +65,6 @@ data class Tab(val song: Song, val artist: Artist, val tuning: Tuning? = null, v
 
     override fun toString() =
         version?.let {
-            "${artist.name} - ${song.name} (${version.name}) (${tuning?.name})"
-        }?: "${artist.name} - ${song.name} (${tuning?.name})"
+            "${artist.name} - ${song.name} (${version.name}) (${tuning?.name}) ~ ${file.absolutePath}"
+        }?: "${artist.name} - ${song.name} (${tuning?.name}) ~ ${file.absolutePath}"
 }

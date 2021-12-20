@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.6.0"
     application
 }
 
@@ -10,7 +10,6 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    jcenter()
     maven("https://jitpack.io")
 }
 
@@ -23,12 +22,6 @@ dependencies {
     implementation("me.xdrop:fuzzywuzzy:1.3.1")
 }
 
-kotlin {
-    sourceSets.all {
-        languageSettings.enableLanguageFeature("InlineClasses")
-    }
-}
-
 tasks.test {
     useJUnitPlatform()
 }
@@ -38,5 +31,5 @@ tasks.withType<KotlinCompile>() {
 }
 
 application {
-    mainClassName = "MainKt"
+    mainClass.set("MainKt")
 }

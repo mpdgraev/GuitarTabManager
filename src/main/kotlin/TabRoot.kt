@@ -17,7 +17,6 @@ class TabRoot(private val root: File) {
     // todo: always start by indexing everything on start? would make everything much more trivial
 
 //    var tabs = getAllTabs()
-
     fun getAllTabs(): List<Tab> {
         return root.listFiles()?.flatMap {
             when (it.isDirectory) {
