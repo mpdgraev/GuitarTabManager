@@ -9,6 +9,8 @@ on:
 
   schedule:
     - cron: "11 11 * * 5"
+  
+  workflow_dispatch:
 
 jobs:
   job1:
